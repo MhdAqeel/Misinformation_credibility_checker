@@ -76,6 +76,20 @@ npm start
 **Never commit your `.env` file or API key.** `.env` is already in
 `.gitignore` — double-check before pushing.
 
+### API keys
+
+Each teammate should create their **own** Gemini API key (from their own
+Google account) for local development — rate limits are tied to the
+project/account behind the key, so separate personal keys mean everyone
+can build and test in parallel without competing for the same quota.
+
+- Put your personal key in your own local `.env` — never commit it, never
+  share it in the group chat/repo
+- The **deployed/demo version** of the app uses one designated "project
+  key" (set by whoever handles deployment) — don't rotate between personal
+  keys in the actual submitted app, to keep behavior consistent and easy
+  to debug
+
 ## Branching workflow
 
 - `main` — always stable, working code
