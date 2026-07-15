@@ -89,6 +89,9 @@ can build and test in parallel without competing for the same quota.
   key" (set by whoever handles deployment) — don't rotate between personal
   keys in the actual submitted app, to keep behavior consistent and easy
   to debug
+- If your project hits a Gemini quota limit, set `GEMINI_MODEL` in `.env`
+  to a model available to your key, and make sure the project has billing or
+  quota enabled for the API calls you want to make.
 
 ## Branching workflow
 
