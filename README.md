@@ -125,7 +125,7 @@ flowchart TD
 
 ---
 
-## 🐳 Lecturer Quick-Start Guide (Docker)
+## 🐳 Quick-Start Guide (Docker)
 
 The fastest and most reproducible way to evaluate this project is via **Docker Compose**.
 
