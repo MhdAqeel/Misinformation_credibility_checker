@@ -1,5 +1,5 @@
 /**
- * geminiService.js — Multi-Signal Credibility Scoring Engine
+ * scoringEngine.js — Multi-Signal Credibility Scoring Engine
  * 
  * Replaces the old single-LLM scoring with a 4-signal weighted system:
  *   Signal 1: Deterministic Text Analysis (20%)  — textAnalyzer.js

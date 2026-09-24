@@ -289,7 +289,7 @@ credibility-checker/
 ├── backend/
 │   ├── server.js              # Express API + Static SPA serving
 │   ├── db.js                  # SQLite WASM schema & persistence
-│   ├── geminiService.js       # Scoring formulas & weight compilation
+│   ├── scoringEngine.js       # Scoring formulas & weight compilation
 │   ├── tests/
 │   │   └── fallback.test.js   # Automated fallback & regression test suite
 │   ├── .env.example           # Environment template
