@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import Groq from 'groq-sdk';
-import { calculateScores } from '../geminiService.js';
+import { calculateScores } from '../scoreConfig.js';
 import { gatherEvidence, traceOrigin } from './evidenceService.js';
 import { analyzeText } from './textAnalyzer.js';
 import { isUrl, scrapeArticleFromUrl } from './urlScraper.js';

@@ -1,20 +1,23 @@
 /**
- * Compatibility shim for the legacy import path.
- * The canonical scoring module now lives in scoreConfig.js.
+ * scoreConfig.js — Multi-Signal Credibility Scoring Engine
+ *
+ * Replaces the old single-LLM scoring with a 4-signal weighted system:
+ *   Signal 1: Deterministic Text Analysis (20%)  — textAnalyzer.js
+ *   Signal 2: Evidence Quality Metrics   (25%)  — evidenceService.js metrics
+ *   Signal 3: Source Origin Fidelity     (10%)  — evidenceService.js traceOrigin
+ *   Signal 4: LLM Analysis + Confidence  (45%)  — llm.js output
+ *
+ * Even if the LLM hallucinates, 45% of the score comes from objective signals.
  */
 
-export {
-  calculateScores,
-  computeLlmRisk,
-  computeOriginRisk,
-  default
-} from './scoreConfig.js';
+// ==========================================
+// LLM Risk Computation (legacy scoring logic, now one signal)
 // ==========================================
 
 /**
  * Computes the LLM-based risk score from flags and consensus.
  * This is the original scoring logic, now encapsulated as one of four signals.
- * 
+ *
  * @param {string[]} flags — array of red flag labels from LLM
  * @param {string} consensus — 'supported' | 'disputed' | 'unclear' | 'no_coverage_found'
  * @returns {{ risk: number, styleScore: number, claimScore: number }}
@@ -76,7 +79,7 @@ export function computeOriginRisk(originAnalysis) {
 
 /**
  * Computes the final credibility score from 4 independent signal layers.
- * 
+ *
  * @param {Object} params
  * @param {Object} params.textAnalysis — result from textAnalyzer.analyzeText()
  * @param {Object} params.evidenceMetrics — result from evidenceService.computeEvidenceMetrics()
