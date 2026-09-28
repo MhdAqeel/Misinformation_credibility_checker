@@ -70,8 +70,8 @@ async function runTests() {
   assert(fallbackResult.credibility_score >= 0 && fallbackResult.credibility_score <= 100, `Valid credibility score: ${fallbackResult.credibility_score}`);
   assert(['supported', 'disputed', 'unclear', 'no_coverage_found', 'unverified'].includes(fallbackResult.consensus), `Valid consensus: ${fallbackResult.consensus}`);
 
-  // TEST 4: Live Call & In-Memory Caching
-  console.log('\n--- Test 4: Live Gemini Call & In-Memory Caching ---');
+  // TEST 4: Live Call
+  console.log('\n--- Test 4: Live Gemini Call ---');
   console.log('Testing live Gemini call with Google Search Grounding...');
   
   const liveResult = await llm.analyze(sampleArticle);
@@ -84,10 +84,6 @@ async function runTests() {
     assert(liveResult.usedSearchGrounding === true, 'Google Search Grounding tool used');
   }
   assert(liveResult.credibility_score !== undefined, `Credibility score calculated: ${liveResult.credibility_score}`);
-
-  console.log('Testing cache hit with identical article text...');
-  const cachedResult = await llm.analyze(sampleArticle);
-  assert(cachedResult.provider === liveResult.provider, 'Second call for identical article text served directly from in-memory cache');
 
   console.log('\n=============================================');
   console.log(`TEST RESULTS: ${passed} PASSED, ${failed} FAILED`);

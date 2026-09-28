@@ -1,41 +1,9 @@
-import crypto from 'crypto';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import Groq from 'groq-sdk';
 import { calculateScores } from '../scoringEngine.js';
 import { gatherEvidence, traceOrigin } from './evidenceService.js';
 import { analyzeText } from './textAnalyzer.js';
 import { isUrl, scrapeArticleFromUrl } from './urlScraper.js';
-
-// ==========================================
-// In-Memory Cache Configuration
-// ==========================================
-const cache = new Map();
-const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
-const CACHE_MAX_SIZE = 100;
-
-function getCacheKey(text) {
-  const normalized = (text || '').trim().toLowerCase().replace(/\s+/g, ' ');
-  return crypto.createHash('sha256').update(normalized).digest('hex');
-}
-
-function getFromCache(key) {
-  const entry = cache.get(key);
-  if (!entry) return null;
-  if (Date.now() - entry.timestamp > CACHE_TTL_MS) {
-    cache.delete(key);
-    return null;
-  }
-  return entry.data;
-}
-
-function setInCache(key, data) {
-  if (cache.size >= CACHE_MAX_SIZE) {
-    // Evict oldest entry
-    const firstKey = cache.keys().next().value;
-    if (firstKey) cache.delete(firstKey);
-  }
-  cache.set(key, { data, timestamp: Date.now() });
-}
 
 // ==========================================
 // Circuit Breaker State
@@ -523,14 +491,6 @@ export async function analyze(articleText) {
   }
 
   const cleanText = articleText.trim();
-  const cacheKey = getCacheKey(cleanText);
-
-  // 1. Check in-memory cache
-  const cached = getFromCache(cacheKey);
-  if (cached) {
-    console.log(`[LLM] Cache HIT for article hash ${cacheKey.slice(0, 10)}... (Served from cache, provider: ${cached.provider})`);
-    return cached;
-  }
 
   const startTime = Date.now();
 
@@ -748,9 +708,6 @@ export async function analyze(articleText) {
     `Origin: ${scores.score_breakdown.origin_risk_score} | LLM: ${scores.score_breakdown.llm_risk_score} (conf: ${confidence}) | ` +
     `Flags: ${flags.length}${provider === 'groq' ? ` | Fallback: ${fallbackReason}` : ''}`
   );
-
-  // Save into in-memory cache
-  setInCache(cacheKey, finalResult);
 
   return finalResult;
 }
